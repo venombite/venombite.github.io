@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<!-- three.js library -->
+<script src='assets/js/three.js'></script>
+
+<script src="assets/js/GLTFLoader.js"></script>
+<!-- ar.js -->
+<script src="assets/js/ar.js"></script>
+
+
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+
+<script>
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Init
+	//////////////////////////////////////////////////////////////////////////////////
+	
+
+	//Statistic
+	// (function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();
+	// 	document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();
+	// 		requestAnimationFrame(loop)});};script.src='//rawgit.com/mrdoob/stats.js/master/build/stats.min.js';
+	// 	document.head.appendChild(script);})()
+
+
+	// init renderer
+	var renderer	= new THREE.WebGLRenderer({
+		antialias: true,
+		alpha: true
+	});
+	renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+	renderer.setSize( 640, 480 );
+	renderer.domElement.style.position = 'absolute'
+	renderer.domElement.style.top = '0px'
+	renderer.domElement.style.left = '0px'
+	document.body.appendChild( renderer.domElement );
+	renderer.shadowMap.enabled = true;
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+
+	//cubemap
+	var cubeMap = new THREE.CubeTextureLoader()
+			.setPath( 'images/ame_siege/' )
+			.load( [ 'px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png' ] );		//
+
+
+	// array of functions for the rendering loop
+	var onRenderFcts= [];
+
+	// init scene and camera
+	var scene	= new THREE.Scene();
+
+	//Init Animation
+    var mixer = null;
+    var clock = new THREE.Clock();
+    var action = {};
+
+		
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Initialize a basic camera
+	//////////////////////////////////////////////////////////////////////////////////
+
+	// Create a camera
+	var camera = new THREE.Camera();
+	scene.add(camera);
+
+	////////////////////////////////////////////////////////////////////////////////
+	//          handle arToolkitSource
+	////////////////////////////////////////////////////////////////////////////////
+
+	var arToolkitSource = new THREEx.ArToolkitSource({
+		// to read from the webcam 
+		sourceType : 'webcam',
+		
+		// // to read from an image
+		// sourceType : 'image',
+		// sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/images/img.jpg',		
+
+		// to read from a video
+		// sourceType : 'video',
+		// sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/videos/headtracking.mp4',		
+	})
+
+	arToolkitSource.init(function onReady(){
+		onResize()
+	})
+	
+	// handle resize
+	window.addEventListener('resize', function(){
+		onResize()
+	})
+	function onResize(){
+		arToolkitSource.onResize()	
+		arToolkitSource.copySizeTo(renderer.domElement)	
+		if( arToolkitContext.arController !== null ){
+			arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)	
+		}	
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	//          initialize arToolkitContext
+	////////////////////////////////////////////////////////////////////////////////
+	
+
+	// create atToolkitContext
+	var arToolkitContext = new THREEx.ArToolkitContext({
+		cameraParametersUrl: 'assets/data/camera_para.dat',
+		detectionMode: 'mono',
+	})
+
+	// initialize it
+	arToolkitContext.init(function onCompleted(){
+		// copy projection matrix to camera
+		camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
+	})
+
+	// update artoolkit on every frame
+	onRenderFcts.push(function(){
+		if( arToolkitSource.ready === false )	return
+
+		arToolkitContext.update( arToolkitSource.domElement )
+		
+		// update scene.visible if the marker is seen
+		scene.visible = camera.visible
+	})
+		
+	////////////////////////////////////////////////////////////////////////////////
+	//          Create a ArMarkerControls
+	////////////////////////////////////////////////////////////////////////////////
+	
+	// init controls for camera
+	var markerControls = new THREEx.ArMarkerControls(arToolkitContext, camera, {
+		type : 'pattern',
+		patternUrl : 'assets/data/patt.ukyo',
+		// patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji',
+		// as we controls the camera, set changeMatrixMode: 'cameraTransformMatrix'
+		changeMatrixMode: 'cameraTransformMatrix'
+	});
+
+	// as we do changeMatrixMode: 'cameraTransformMatrix', start with invisible scene
+	scene.visible = false;
+
+
+
+	//LIGHTING
+	var hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xFFFFFF, 0.5);
+	hemiLight.color.setHSL( 0.6, 1, 0.6 );
+	hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+	hemiLight.position.set( 0, 0, 0 );
+
+	scene.add(hemiLight);
+
+	var sunLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+	sunLight.position.set(-13, 15, 13);
+	sunLight.castShadow = true;
+	scene.add(sunLight);
+
+	var d = 2.5;
+	sunLight.shadow.camera.left = -d;
+	sunLight.shadow.camera.right = d;
+	sunLight.shadow.camera.top = d;
+	sunLight.shadow.camera.bottom = -d;
+	sunLight.shadow.camera.far = 3500;
+	sunLight.shadow.bias = -0.000001;
+	sunLight.shadow.mapSize.width = 1024;  // default
+	sunLight.shadow.mapSize.height = 1024; // default
+	sunLight.shadow.camera.near = 0.01;       // default
+	sunLight.shadow.camera.far = 5000;      // default
+
+
+	//MATERIAL
+	var material = new THREE.MeshBasicMaterial({
+		color: 0xFF5555 
+	});
+	
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		add an object in the scene
+	//////////////////////////////////////////////////////////////////////////////////
+
+			var loader1 = new THREE.GLTFLoader();
+			loader1.load('assets/mesh/denah.gltf', 
+				function (gltf) {
+                    var model1 = gltf.scene;
+                    model1.scale.set (0.2, 0.2, 0.2);
+                    model1.receiveShadow = true;
+                    scene.add(model1);
+
+
+
+            });
+
+
+			var loader = new THREE.GLTFLoader();
+			loader.load('assets/mesh/house.gltf', 
+				function (gltf) {
+                    var model = gltf.scene;
+                    model.scale.set (0.2, 0.2, 0.2);
+                	model.traverse( function ( node ) {
+					if ( node.isMesh ) {
+						node.castShadow = true;
+						node.receiveShadow = true;
+						node.envMap = cubeMap;
+					}
+					}) 
+					
+					model.traverse( function ( child ) {
+
+			          if ( child instanceof THREE.Mesh ) {
+
+			              child.material.envMap = cubeMap;
+			              // add any other properties you want here. check the docs.
+
+			          }
+
+			    	})
+			    	
+                    scene.add(model);
+
+                    mixer = new THREE.AnimationMixer(model);
+	                action.clip = mixer.clipAction(gltf.animations[0]);
+	                //action.clip.stop();
+
+            });
+				//gltf.animations; // Array<THREE.AnimationClip>
+				//gltf.scene; // THREE.Scene
+				//gltf.scenes; // Array<THREE.Scene>
+				//gltf.cameras; // Array<THREE.Camera>
+				
+	//interaction
+	var animToggle = 1;
+	window.addEventListener('click', PlayAnimation, false);
+	window.addEventListener('dblclick', StopAnimation, false);
+
+	function PlayAnimation(){
+		if(animToggle == 1){
+
+			action.clip.play();
+			action.clip.clampWhenFinished = true;
+			action.clip.paused = false;
+			animToggle = 0;
+		}
+		else{
+			action.clip.paused = true;
+			animToggle = 1;
+		}
+		
+	}
+	
+	function StopAnimation(){
+		action.clip.stop();
+		animToggle = 1;
+
+	}
+
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		render the whole thing on the page
+	//////////////////////////////////////////////////////////////////////////////////
+
+	// render the scene
+	onRenderFcts.push(function(){
+		renderer.render( scene, camera );
+	})
+
+	// run the rendering loop
+	var lastTimeMsec= null
+	requestAnimationFrame(function animate(nowMsec){
+
+		var delta = clock.getDelta();
+        if (mixer != null) {
+            mixer.update(delta);
+        };
+		
+		// keep looping
+		requestAnimationFrame( animate );
+		// measure time
+		lastTimeMsec	= lastTimeMsec || nowMsec-1000/60
+		var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
+		lastTimeMsec	= nowMsec
+		// call each update function
+		onRenderFcts.forEach(function(onRenderFct){
+			onRenderFct(deltaMsec/1000, nowMsec/1000)
+		})
+	})
+</script>
+<div style='position: absolute; width:100%; height: 100%; top: 85%; padding: 4px; background-color: grey; opacity:0.25;'>
+	
+</div>
+<div style='position: absolute; top: 85%; right: 0px; padding: 4px;'>
+	<button  style='background-color: #4CAF50; font-size: 16px; width: 100px; border: none; margin: auto; padding: 10px; overflow: hidden; font-family: Monospace; z-index: 2' onclick="window.location='VR.html';">VR VIEW</button>
+</div>
+</body>
