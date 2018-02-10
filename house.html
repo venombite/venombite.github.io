@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Amazing Places</title>
+
+		<link rel="stylesheet" href="assets/css/main.css">
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	    <!-- Optional theme -->	    
+	    <link rel="stylesheet" href="assets/css/bootstrap-theme.min.css">
+	    <script src="assets/js/aframe.min.js"></script>
+	    <script src="assets/js/aframe-look-at-component.min.js"></script>
+	    <script src="assets/js/aframe-extras.min.js"></script>
+	    <script src="assets/js/aframe-gearvr-controls-component.min.js"></script>
+	    
+	</head>	
+
+	<body>
+		<!-- Header -->
+			<header id="header" class="alt">
+				<a href="#menu">Menu</a>
+			</header>
+
+		<!-- Nav -->
+			<nav id="menu">
+				<ul class="links">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="featured.html">Featured</a></li>
+					<li><a href="places.html">Amazing Places</a></li>
+					<li><a href="travel.html">Travel</a></li>
+					<li><a href="real.html">Real Estate</a></li>
+				</ul>
+			</nav>
+						
+			<div class="aframebox">
+
+			    <!--Aframe Assets-->
+	    		<a-scene embedded>
+		      	
+			      	<a-assets>
+				        <img id="skyTexture" src="images/real.jpg">
+			  			<img id="pano01" src="images/real/house_pano01.jpg">
+			  			<img id="pano02" src="images/real/house_pano02.jpg">
+			  			<img id="pano03" src="images/real/house_pano03.jpg">
+			  			<img id="pano04" src="images/real/house_pano04.jpg">
+			  			<img id="pano05" src="images/real/house_pano05.jpg">
+			  			<img id="pano06" src="images/real/house_pano06.jpg">
+			  			<img id="pano07" src="images/real/house_pano07.jpg">
+			  			<img id="pano08" src="images/real/house_pano08.jpg">
+
+					    <a-asset-item id="gearvr-obj" src="assets/mesh/gear_vr_controller.obj"></a-asset-item>
+					    <a-asset-item id="gearvr-mtl" src="assets/mesh/gear_vr_controller.mtl"></a-asset-item>
+
+						<!--Environment<a-mixin id="checkpoint"></a-mixin>
+						<a-mixin id="checkpoint-hovered" color="#6CEEB5"></a-mixin>-->
+			     	</a-assets>
+
+			     	<!--<a-entity gearvr-controls>
+					<a-obj-model src="#gearvr-obj" mtl="#gearvr-mtl"></a-obj-model>
+			     	</a-entity>-->
+
+
+
+			     	<!--Environment-->
+			      	<a-sky id="background" src="#skyTexture" rotation="0 -90 0"></a-sky>
+
+					<!-- Player -->
+					<a-entity position="0.3 0 9.3" id="maincam" camera="userHeight: 1.6" universal-controls="movementControls: checkpoint" checkpoint-controls="mode: teleport">
+					
+					<!-- Cursor -->
+						<a-entity id="cursor-main" cursor="fuse: true; timeout: 3000;" position="0 0 -0.5" scale="0.25 0.25 0.25" geometry="primitive: ring; radiusOuter: 0.06; radiusInner: 0.04; segmentsTheta: 32; thetaLength: 360; thetaStart: 90;"material="color: #DDD;">
+
+								<a-animation begin="cursor-fusing" easing="ease-in" attribute="geometry.thetaLength" fill="forwards" from="360" to="0" dur="1500"></a-animation>
+
+								<a-animation begin="mouseleave" attribute="geometry.thetaLength" fill="backwards" from="0" to="360" dur="0"></a-animation>
+
+
+						</a-entity>
+
+						<a-entity id="cursor-loader" position="0 0 -0.5001" geometry="primitive: ring; radiusOuter: 0.06; radiusInner: 0.04;" material="color: #2ADD2A;" scale="0.25 0.25 0.25">						
+						</a-entity>
+
+
+					</a-entity>
+
+					<!-- Checkpoints 
+					<a-entity position="1 0 1">
+						<a-cylinder checkpoint="offset: 0 1.6 0" radius="0.3" height="0.1" position="-3 0 -5" color="#39BB82"></a-cylinder>
+						<a-cylinder checkpoint="offset: 0 1.6 0" radius="0.3" height="0.1" position="3 0 0" color="#39BB82"></a-cylinder>
+						<a-cylinder checkpoint="offset: 0 1.6 0" radius="0.3" height="0.1" position="-5 0 0" color="#39BB82"></a-cylinder>
+						<a-cylinder checkpoint="offset: 0 1.6 0" radius="0.3" height="0.1" position="-5 0 -5" color="#39BB82"></a-cylinder>
+						<a-cylinder checkpoint="offset: 0 1.6 0" radius="0.3" height="0.1" position="3 0 5" color="#39BB82"></a-cylinder>-->
+
+					<a-entity checkpoint="offset: 0 1.6 0" position="0.3 0 9.3" scale="2 2 2" >
+						<a-sphere button-interaction-handler="skytextID: #pano01" color="#39BB82" scale="0.1 0.1 0.1">
+						</a-sphere>
+
+						
+					</a-entity>	
+
+					<a-entity checkpoint="offset: 0 1.6 0" position="-1.5 0 0.7" scale="2 2 2" >
+						<a-sphere button-interaction-handler="skytextID: #pano02" color="#39BB82" scale="0.1 0.1 0.1">
+							
+						</a-sphere>
+					</a-entity>	
+
+					<a-entity checkpoint="offset: 0 1.6 0" position="0.3 0 4.3" scale="2 2 2" >
+						<a-sphere button-interaction-handler="skytextID: #pano03" color="#39BB82" scale="0.1 0.1 0.1">
+							
+						</a-sphere>
+					</a-entity>	
+
+					<a-entity checkpoint="offset: 0 1.6 0" position="0.3 0 7.3" scale="2 2 2" >
+						<a-sphere button-interaction-handler="skytextID: #pano04" color="#39BB82" scale="0.1 0.1 0.1">
+							
+						</a-sphere>
+					</a-entity>	
+
+					<a-entity checkpoint="offset: 0 1.6 0" position="2.9 0 6.3" scale="2 2 2" >
+						<a-sphere button-interaction-handler="skytextID: #pano05" color="#39BB82" scale="0.1 0.1 0.1">
+							
+						</a-sphere>
+					</a-entity>	
+
+					<a-entity checkpoint="offset: 0 1.6 0" position="-2.7 0 9.3" scale="2 2 2" >		
+						<a-sphere button-interaction-handler="skytextID: #pano06" color="#39BB82" scale="0.1 0.1 0.1">
+							
+						</a-sphere>
+					</a-entity>	
+
+					<a-entity checkpoint="offset: 0 1.6 0" position="2.7 0 9.3" scale="2 2 2" >
+						<a-sphere button-interaction-handler="skytextID: #pano07" color="#39BB82" scale="0.1 0.1 0.1">
+							
+						</a-sphere>
+					</a-entity>
+
+					<a-entity checkpoint="offset: 0 1.6 0" position="0.3 0 0.7" scale="2 2 2" >
+						<a-sphere button-interaction-handler="skytextID: #pano08" color="#39BB82" scale="0.1 0.1 0.1">
+							
+						</a-sphere>
+					</a-entity>	
+
+
+				</a-scene>
+				
+
+
+				<div class="centered">
+
+					<h2>Explore Amazing House</h2><br><br><br>
+					
+				</div>
+			</div>
+
+			<div class="mythumbnail">
+				<div class="row" style="padding: 0; margin: 0; border: none">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding: 20px; margin: 0;">
+						<h2 style="padding: 0; margin: 0; border: none">Informasi</h2>
+							<p>
+							<ul>
+								<li>Luas tanah : 200 m2</li>
+								<li>Luas bangunan : 175 m2</li>
+								<li>Lantai : 1 Kamar tidur : 3 Kamar mandi</li>
+								<li>Sertifikasi : SHM - Sertifikat Hak Milik</li>
+								<li> Alamat lokasi :    Graha Padma Cluster Magnolia A5/12 Los Angeles</li>
+							</ul>
+							</p>
+						<h2 style="padding: 0; margin: 0; border: none">Contact Person</h2><br>
+						<img class="img-thumbnail" src="images/fotosales.jpg" height="150" width="150" style="padding: 0; margin: 10px; float:left;" >
+						<b>Nama:</b> Chelsea Wimbledon <br>
+						<b>Mobile no:</b> +81821945804<br><br>
+						<a href="tel:+81821945804"><button type="button" class="btn btn-success">Call Now</button></a><br><br>
+						<a href="https://api.whatsapp.com/send?phone=81821945804"><button type="button" class="btn btn-success">Whatsapp</button></a>						    			
+					</div>
+				<div class="row" style="padding: 0; margin: 0; border: none">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding: 20px; margin: 0;">
+						<div class="imageThumbnail">
+		    			<img class="img-thumbnail" data-pano="pano01" src="images/real01.jpg" height="150" width="150">
+		    			<img class="img-thumbnail" data-pano="pano02" src="images/real02.jpg" height="150" width="150">
+		    			<img class="img-thumbnail" data-pano="pano03" src="images/real04.jpg" height="150" width="150">
+		    			<img class="img-thumbnail" data-pano="pano04" src="images/real03.jpg" height="150" width="150">
+		    			<img class="img-thumbnail" data-pano="pano05" src="images/real02.jpg" height="150" width="150">
+		    			<img class="img-thumbnail" data-pano="pano06" src="images/real01.jpg" height="150" width="150">
+		    			<img class="img-thumbnail" data-pano="pano07" src="images/real03.jpg" height="150" width="150">
+		    			<img class="img-thumbnail" data-pano="pano08" src="images/real04.jpg" height="150" width="150">
+		    		</div>
+					</div>
+				</div>
+			</div>
+
+		<!-- Footer -->
+
+			<footer id="footer">
+				<div class="container">		
+					<ul class="icons">
+						<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+						<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+						<li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+					</ul>
+				</div>
+				<div class="copyright">
+					&copy; 2018 Johanes Chendra. All rights reserved.
+				</div>
+			</footer>
+		
+		<!-- Scripts -->
+
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/skel.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+		<script src="assets/js/script.js"></script>	
+
+		<!-- Latest compiled and minified JavaScript -->
+	    <script src="assets/js/bootstrap.min.js"></script>
+
+	</body>
+</html>

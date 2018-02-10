@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Amazing Places</title>
+
+		<link rel="stylesheet" href="assets/css/main.css">
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	    <!-- Optional theme -->	    
+	    <link rel="stylesheet" href="assets/css/bootstrap-theme.min.css">
+	    <script src="assets/js/aframe.min.js"></script>
+		<script src="assets/js/aframe-gearvr-controls-component.min.js"></script>
+		<script src="assets/js/aframe-look-at-component.min.js"></script>
+
+		<script>
+		  AFRAME.registerComponent('bar', {
+		    init: function() {
+		      let cursor = document.createElement('a-cursor');
+		      let el = this.el;
+		      this.el.sceneEl.addEventListener('enter-vr', function() {
+		        console.log("entered");
+		        el.appendChild(cursor);
+		      })
+		      this.el.sceneEl.addEventListener('exit-vr', function() {
+		        el.removeChild(cursor);
+		      })
+		    }
+		  })
+
+		</script>
+
+
+
+
+	</head>	
+
+	<body>
+		<!-- Header -->
+			<header id="header" class="alt">
+				<a href="#menu">Menu</a>
+			</header>
+
+		<!-- Nav -->
+			<nav id="menu">
+				<ul class="links">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="featured.html">Featured</a></li>
+					<li><a href="places.html">Amazing Places</a></li>
+					<li><a href="travel.html">Travel</a></li>
+					<li><a href="real.html">Real Estate</a></li>
+				</ul>
+			</nav>
+						
+			<div class="aframebox">
+
+			    <!--Aframe Assets-->
+	    		<a-scene stats embedded cursor="rayOrigin: mouse">
+		      	
+		      	<a-assets>
+			        <img id="skyTexture" src="images/places.jpg">
+    		        <img id="pano01" src="images/blacksea_pano01.jpg">
+			        <img id="pano02" src="images/blacksea_pano02.jpg">
+			        <img id="pano03" src="images/blacksea_pano03.jpg">	
+			        <img id="pano04" src="images/blacksea_pano04.jpg">		  
+		     	</a-assets>
+
+		     	<!--Environment-->
+		      	<a-sky id="background" src="#skyTexture" rotation="0 0 0"></a-sky>
+
+
+
+				<a-camera bar id="maincam"> 
+					<!--Environment
+					<a-entity id="cursor-main"
+					cursor="fuse: true; timeout: 3000;"
+					position="0 0 -0.5"
+					scale="0.25 0.25 0.25"
+					geometry="primitive: ring; radiusOuter: 0.06; radiusInner: 0.04; thetaLength: 360; thetaStart: 90;"
+					material="color: #CCC;">
+
+						<a-animation begin="cursor-fusing" easing="ease-in" attribute="geometry.thetaLength" fill="forwards" from="360" to="0" dur="1500"></a-animation>
+
+						<a-animation begin="mouseleave" attribute="geometry.thetaLength" fill="backwards" from="0" to="360" dur="0"></a-animation>
+
+					</a-entity>
+
+					<a-entity id="cursor-loader" position="0 0 -0.5001" geometry="primitive: ring; radiusOuter: 0.06; radiusInner: 0.04;" material="color: #2ADD2A;" scale="0.25 0.25 0.25">	            
+					</a-entity> -->
+					
+				</a-camera>
+			<a-entity text="value: Rural Area;" align="center" look-at="#maincam" position="2 1 -4" scale="4 4 4" ><a-sphere button-interaction-handler="skytextID: #pano04" position="-0.4 -0.1 -0.1" color="orange" scale="0.05 0.05 0.05">
+			</a-sphere></a-entity>	
+
+			<a-entity text="value: Swamp Area;" align="center" look-at="#maincam" position="1 1 -4" scale="4 4 4" ><a-sphere button-interaction-handler="skytextID: #pano03" position="-0.4 -0.1 -0.1" color="blue" scale="0.05 0.05 0.05">
+			</a-sphere></a-entity>	
+
+			<a-entity text="value: Beach Area;" align="center" look-at="#maincam" position="0 1 -4" scale="4 4 4" ><a-sphere button-interaction-handler="skytextID: #pano01" position="-0.4 -0.1 -0.1" color="green" scale="0.05 0.05 0.05">
+			</a-sphere></a-entity>			
+			
+			<a-entity text="value: Harbour Area;" align="center" look-at="#maincam" position="-1 1 -4" scale="4 4 4" ><a-sphere button-interaction-handler="skytextID: #pano02" position="-0.4 -0.1 -0.1" color="red" scale="0.05 0.05 0.05">
+			</a-sphere></a-entity>
+
+				</a-scene>
+				
+				<div class="centered">
+
+					<h2>Black Sea Beach</h2><br><br><br><br>
+				</div>
+			</div>
+
+			<div class="mythumbnail">
+				<div class="row" style="padding: 0; margin: 0; border: none">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding: 20px; margin: 0;">
+						<h2 style="padding: 0; margin: 0; border: none">Information</h2><br>
+							<p>The Black Sea is a body of water and marginal sea of the Atlantic Ocean between Eastern Europe, the Caucasus, and Western Asia.[1] It is supplied by a number of major rivers, such as the Danube, Dnieper, Rioni, Southern Bug, and Dniester. The Black Sea has an area of 436,400 km2 (168,500 sq mi) (not including the Sea of Azov),[2] a maximum depth of 2,212 m (7,257 ft),[3] and a volume of 547,000 km3 (131,000 cu mi).[4] It is constrained by the Pontic Mountains to the south and by the Caucasus Mountains to the east, and features a wide shelf to the northwest. The longest east-west extent is about 1,175 km (730 mi).</p>			    			
+					</div>
+				<div class="row" style="padding: 0; margin: 0; border: none">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding: 20px; margin: 0;">
+						<div class="imageThumbnail">
+		    			<img class="img-thumbnail" data-pano="pano01" src="images/blacksea01.jpg" height="150" width="150">
+		    			<img class="img-thumbnail" data-pano="pano02" src="images/blacksea02.jpg" height="150" width="150">
+		    			<img class="img-thumbnail" data-pano="pano03" src="images/blacksea03.jpg" height="150" width="150">
+		    			<img class="img-thumbnail" data-pano="pano04" src="images/blacksea04.jpg" height="150" width="150"></div>
+					</div>
+				</div>
+			</div>
+
+		<!-- Footer -->
+
+			<footer id="footer">
+				<div class="container">		
+					<ul class="icons">
+						<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+						<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+						<li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+					</ul>
+				</div>
+				<div class="copyright">
+					&copy; 2018 Johanes Chendra. All rights reserved.
+				</div>
+			</footer>
+		
+		<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/skel.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+		<script src="assets/js/script.js"></script>	
+
+		<!-- Latest compiled and minified JavaScript -->
+	    <script src="assets/js/bootstrap.min.js"></script>
+
+	</body>
+</html>

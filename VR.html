@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>VR View</title>
+    <script src="assets/js/aframe.min.js"></script>
+    <script src="assets/js/aframe-stereo-component.min.js"></script>
+  </head>
+  <body>
+
+    <a-scene antialias="true">
+      <!-- Paths to left and right images -->
+      <a-assets>
+        <img id="left" src="images/Left.jpg">
+        <img id="right" src="images/Right.jpg">
+      </a-assets>
+
+      <!-- Camera -->
+      <a-entity camera look-controls position="0 0 0" stereocam="eye:left;"></a-entity>
+
+      <!-- Sky sphere -->
+      <a-sky id="sky1" src="#left" stereo="eye:left"></a-sky>
+      <a-sky id="sky2" src="#right" stereo="eye:right"></a-sky>
+
+    </a-scene>
+
+  </body>
+</html>
